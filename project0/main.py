@@ -3,27 +3,26 @@ import sqlite3
 import urllib.request
 import re
 import os
-import pypdf
 from pypdf import PdfReader
 
 def fetchincidents(url):
     # Setting headers for the download request
-    h = {
+    headers = {
         'User-Agent': ("Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 "
                        "(KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17")
     }
     
     # File path for the downloaded PDF
-    p = "/tmp/daily_incident_summary.pdf"
+    pdf_path = "/tmp/daily_incident_summary.pdf"
     
     try:
         # Requesting and saving the PDF
-        r = urllib.request.Request(url, headers=h)
-        with urllib.request.urlopen(r) as res, open(p, 'wb') as f:
-            f.write(res.read())
+        request = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(request) as response, open(pdf_path, 'wb') as file:
+            file.write(response.read())
             
-        print(f"PDF downloaded successfully and saved to {p}")
-        return p
+        print(f"PDF downloaded successfully and saved to {pdf_path}")
+        return pdf_path
     except Exception as e:
         print(f"Error downloading PDF: {e}")
         return None
@@ -68,20 +67,22 @@ def extractincidents(pdf_file_path):
 
 def createdb():
     print("Creating SQLite database...")
-    d = 'resources'
-    db_path = os.path.join(d, 'normanpd.db')
+    resources_dir = 'resources'
+    db_path = os.path.join(resources_dir, 'normanpd.db')
     
     # Create 'resources' directory if missing
-    if not os.path.exists(d):
-        os.makedirs(d)
-        print(f"Created directory: {d}")
+    if not os.path.exists(resources_dir):
+        os.makedirs(resources_dir)
 
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
 
-    # Creating table if it doesn't exist
+    # Dropping the table if it exists for a fresh start
+    c.execute('DROP TABLE IF EXISTS incidents')
+    
+    # Creating table
     c.execute('''
-        CREATE TABLE IF NOT EXISTS incidents (
+        CREATE TABLE incidents (
             incident_time TEXT,
             incident_number TEXT,
             incident_location TEXT,
@@ -128,15 +129,15 @@ def status(db):
 
 def main(url):
     # Fetch data
-    p = fetchincidents(url)
+    pdf_path = fetchincidents(url)
 
-    if not p:
+    if not pdf_path:
         print("Failed to download the PDF.")
         return
     
     # Extract incidents
-    i = extractincidents(p)
-    if not i:
+    incidents = extractincidents(pdf_path)
+    if not incidents:
         print("No incidents extracted from the PDF.")
         return
     
@@ -144,7 +145,7 @@ def main(url):
     db = createdb()
     
     # Populate DB
-    populatedb(db, i)
+    populatedb(db, incidents)
     
     # Show status
     status(db)
