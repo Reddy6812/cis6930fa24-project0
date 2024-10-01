@@ -35,8 +35,9 @@ def extractincidents(pdf_file_path):
     # Regex patterns to capture each field
     date_time_pattern = r'(\d{1,2}/\d{1,2}/\d{4} \d{1,2}:\d{2})'
     incident_number_pattern = r'(\d{4}-\d{5,8})'
-    location_pattern = r'([A-Z0-9][\w\s./;-]*?|[\d.;-]+|AVE|ST|\d+\s+\d+/\d+|\d+\.\d+;\d+\.\d+)'
-    nature_pattern = r'((?:911|Fire|Abdominal\s+)?[A-Z][a-z]+(?:/[A-Za-z]+)*(?:\s+(?:[A-Za-z]+|and|to|Nature\sUnknown|Call))*?)'
+    location_pattern = r'([A-Z0-9][\w\s./;-]*?(?=\s[A-Z][a-z/]))'
+    nature_pattern = r'([A-Z][a-z]+(?:\s*/\s*[A-Z][a-z]+)*(?:\s+[A-Za-z]+)*)'
+
     ori_pattern = r'(OK\d+|EMSSTAT|14005)'
 
     # Combining the full row pattern
@@ -73,14 +74,17 @@ def createdb():
     # Create 'resources' directory if missing
     if not os.path.exists(resources_dir):
         os.makedirs(resources_dir)
+    
+    # Delete the existing database file if it exists
+    if os.path.exists(db_path):
+        os.remove(db_path)
+        print(f"Existing database deleted: {db_path}")
 
+    # Create a new SQLite database
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
 
-    # Dropping the table if it exists for a fresh start
-    c.execute('DROP TABLE IF EXISTS incidents')
-    
-    # Creating table
+    # Create the 'incidents' table
     c.execute('''
         CREATE TABLE incidents (
             incident_time TEXT,
@@ -95,13 +99,15 @@ def createdb():
     print(f"Database created at {db_path}")
     return conn
 
+
+
 def populatedb(db, data):
     if not data:
         print("No incidents to insert into the database.")
         return
     
     c = db.cursor()
-    # Inserting extracted incidents into the database
+    # Inserting extracted incidents into the database, allowing duplicates
     c.executemany('''
         INSERT INTO incidents (incident_time, incident_number, incident_location, nature, incident_ori)
         VALUES (:incident_time, :incident_number, :location, :nature, :incident_ori)
@@ -110,9 +116,11 @@ def populatedb(db, data):
     db.commit()
     print(f"Inserted {len(data)} incidents into the database.")
 
+
+
 def status(db):
     c = db.cursor()
-    # Fetching and counting incidents by 'nature'
+    # Fetching and counting incidents by 'nature', including duplicates
     c.execute('''
         SELECT nature, COUNT(*) as count
         FROM incidents
@@ -126,6 +134,29 @@ def status(db):
     else:
         for row in results:
             print(f"{row[0]}|{row[1]}")
+
+def head(db, n=400):
+    c = db.cursor()
+    
+    # Fetch the top `n` rows from the incidents table
+    c.execute('''
+        SELECT incident_time, incident_number, incident_location, nature, incident_ori
+        FROM incidents
+        LIMIT ?
+    ''', (n,))
+    
+    rows = c.fetchall()
+    
+    if not rows:
+        print(f"No data available in the database to display the top {n} rows.")
+    else:
+        print(f"Top {n} rows from the incidents database:")
+        print(f"{'Date / Time':<20} {'Incident Number':<20} {'Location':<30} {'Nature':<30} {'Incident ORI':<10}")
+        print("-" * 110)
+        for row in rows:
+            print(f"{row[0]:<20} {row[1]:<20} {row[2]:<30} {row[3]:<30} {row[4]:<10}")
+
+
 
 def main(url):
     # Fetch data
@@ -146,7 +177,7 @@ def main(url):
     
     # Populate DB
     populatedb(db, incidents)
-    
+    #head(db)
     # Show status
     status(db)
     db.close()
