@@ -36,7 +36,7 @@ def extractincidents(pdf_file_path):
     date_time_pattern = r'(\d{1,2}/\d{1,2}/\d{4} \d{1,2}:\d{2})'
     incident_number_pattern = r'(\d{4}-\d{5,8})'
     location_pattern = r'([A-Z0-9][\w\s./;-]*?(?=\s[A-Z][a-z/]))'
-    nature_pattern = r'([A-Z][a-z]+(?:\s*/\s*[A-Z][a-z]+)*(?:\s+[A-Za-z]+)*)'
+    nature_pattern = r'([A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)'
 
     ori_pattern = r'(OK\d+|EMSSTAT|14005)'
 
