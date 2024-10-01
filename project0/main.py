@@ -32,7 +32,7 @@ def extractincidents(pdf_file_path):
     reader = PdfReader(pdf_file_path)
     incidents = []
     
-    # Adjusted regex patterns to correctly capture the '911' as part of the nature field
+    # Regex patterns to capture each field
     date_time_pattern = r'(\d{1,2}/\d{1,2}/\d{4} \d{1,2}:\d{2})'
     incident_number_pattern = r'(\d{4}-\d{5,8})'
     location_pattern = r'([A-Z0-9][\w\s./;-]*?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))'
@@ -77,6 +77,7 @@ def extractincidents(pdf_file_path):
     except Exception as e:
         print(f"Error extracting incidents: {e}")
         return []
+
 
 
 
