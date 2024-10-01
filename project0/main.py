@@ -36,8 +36,8 @@ def extractincidents(pdf_file_path):
     # Regex patterns to capture each field
     date_time_pattern = r'(\d{1,2}/\d{1,2}/\d{4} \d{1,2}:\d{2})'
     incident_number_pattern = r'(\d{4}-\d{5,8})'
-    location_pattern = r'([A-Z0-9][\w\s./;-]*?|[\d.;-]+|\d+\s+\d+/\d+|\d+\.\d+;\d+\.\d+)'
-    nature_pattern = r'((?:911|Abdominal\s+)?[A-Z][a-z]+(?:/[A-Za-z]+)*(?:\s+(?:[A-Za-z]+|and|to|Nature\sUnknown|Call))*?)'
+    location_pattern = r'([A-Z0-9][\w\s./;-]*?|[\d.;-]+|AVE|ST|\d+\s+\d+/\d+|\d+\.\d+;\d+\.\d+)'
+    nature_pattern = r'((?:911|Fire|Abdominal\s+)?[A-Z][a-z]+(?:/[A-Za-z]+)*(?:\s+(?:[A-Za-z]+|and|to|Nature\sUnknown|Call))*?)'
     ori_pattern = r'(OK\d+|EMSSTAT|14005)'
 
     # Combining the full row pattern
