@@ -35,13 +35,11 @@ def extractincidents(pdf_file_path):
     # Regex patterns to capture each field
     date_time_pattern = r'(\d{1,2}/\d{1,2}/\d{4} \d{1,2}:\d{2})'
     incident_number_pattern = r'(\d{4}-\d{5,8})'
-    #location_pattern = r'([A-Z0-9][\w\s./;-]*?(?=\s(?:911|MVA|COP|EMS|Contact|[A-Z][a-z/])))'
-    # nature_pattern = r'(911(?:\s+[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)?|[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)'
-    #location_pattern = r"([A-Z0-9][\w\s./;'()-]*?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))"
     
- 
-    location_pattern = r"([A-Z0-9][\w\s./;'()-]*?(?:\n[\w\s./;'()-]*)?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))"
-
+    #location_pattern = r"([A-Z0-9][\w\s./;'()-]*?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))"
+    location_pattern = r"([A-Z0-9][\w\s./,'()-]*?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))"
+    #location_pattern = r"([A-Z0-9][\w\s./;'()-]*?(?:RAMP\s\d+\sRAMP)?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))"
+    #nature_pattern = r'(911(?:\s+[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)?|[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)'
     nature_pattern = r'(911(?:\s+[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)?|[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)'
 
     ori_pattern = r'(OK\d+|EMSSTAT|\d{5})'
