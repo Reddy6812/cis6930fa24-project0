@@ -37,15 +37,16 @@ def extractincidents(pdf_file_path):
     incident_number_pattern = r'(\d{4}-\d{5,8})'
     location_pattern = r'([A-Z0-9][\w\s./;-]*?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))'
     nature_pattern = r'(911(?:\s+[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)?|[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)'
-    ori_pattern = r'(OK\d+|EMSSTAT|14005)'
+    # location_pattern = r'([A-Z0-9][\w\s./;-]*?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))'
+    # nature_pattern = r'((?:911|MVA|COP|EMS)?[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)'
+
+
+    ori_pattern = r'(OK\d+|EMSSTAT|\d{5})'
 
     # Combining the full row pattern
     row_pattern = re.compile(
         rf"{date_time_pattern}\s+{incident_number_pattern}\s+{location_pattern}\s+{nature_pattern}\s+{ori_pattern}"
     )
-
-    # Track whether "Fire Grass" or "Public Assist" has been duplicated
-    first_occurrence = {"Fire Grass": False, "Public Assist": False}
 
     try:
         for page in reader.pages:
@@ -54,30 +55,19 @@ def extractincidents(pdf_file_path):
             
             # Find all matches using the improved row pattern
             for match in row_pattern.findall(text):
-                incident = {
+                incidents.append({
                     "incident_time": match[0].strip(),
                     "incident_number": match[1].strip(),
                     "location": match[2].strip(),
                     "nature": match[3].strip(),
                     "incident_ori": match[4].strip()
-                }
-                
-                # Add the incident to the list
-                incidents.append(incident)
-                
-                # Check if the nature is "Fire Grass" or "Public Assist"
-                if incident["nature"] in ["Fire Grass", "Public Assist"]:
-                    if not first_occurrence[incident["nature"]]:
-                        # Duplicate only for the first occurrence
-                        incidents.append(incident.copy())
-                        first_occurrence[incident["nature"]] = True
-
+                })
+        
         print(f"Extracted {len(incidents)} incidents from the PDF.")
         return incidents
     except Exception as e:
         print(f"Error extracting incidents: {e}")
         return []
-
 
 
 
