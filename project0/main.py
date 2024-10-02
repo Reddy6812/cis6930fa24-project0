@@ -38,7 +38,7 @@ def extractincidents(pdf_file_path):
     
     #location_pattern = r"([A-Z0-9][\w\s./;'()-]*?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))"
     #location_pattern = r"([A-Z0-9][\w\s./,'()-]*?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))"
-    location_pattern = r"([A-Z0-9][\w\s./;'()-]*?(?:RAMP\s\d+\sRAMP)?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))"
+    location_pattern = r"([A-Z0-9][\w\s./,;'()-]*?(?:RAMP\s\d+\sRAMP)?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))"
     #nature_pattern = r'(911(?:\s+[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)?|[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)'
     nature_pattern = r'(911(?:\s+[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)?|[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)'
 
