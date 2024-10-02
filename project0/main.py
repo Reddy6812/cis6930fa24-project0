@@ -27,6 +27,7 @@ def fetchincidents(url):
         print(f"Error downloading PDF: {e}")
         return None
 
+
 def extractincidents(pdf_file_path):
     #print("Extracting incidents from the PDF...")
     reader = PdfReader(pdf_file_path)
@@ -36,12 +37,12 @@ def extractincidents(pdf_file_path):
     date_time_pattern = r'(\d{1,2}/\d{1,2}/\d{4} \d{1,2}:\d{2})'
     incident_number_pattern = r'(\d{4}-\d{5,8})'
     
-    #location_pattern = r"([A-Z0-9][\w\s./;'()-]*?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))"
-    #location_pattern = r"([A-Z0-9][\w\s./,'()-]*?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))"
-    location_pattern = r"([A-Z0-9][\w\s./,;'()-]*?(?:RAMP\s\d+\sRAMP)?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))"
-    #nature_pattern = r'(911(?:\s+[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)?|[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)'
-    nature_pattern = r'(911(?:\s+[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)?|[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)'
+    #location_pattern = r"([A-Z0-9][\w\s./,'()-]+(?:\s/\s[A-Z][\w\s]+)*?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))"
 
+    #nature_pattern = r'(911(?:\s+[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)?|[A-Z][a-zA-Z\s]+(?:\s+[A-Za-z\s]+)*)'
+
+    location_pattern = r"([A-Z0-9][\w\s./,;'()-]*?(?:RAMP\s\d+\sRAMP)?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))"
+    nature_pattern = r'(911(?:\s+[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)?|[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)'
     ori_pattern = r'(OK\d+|EMSSTAT|\d{5})'
 
     # Combining the full row pattern
@@ -51,8 +52,8 @@ def extractincidents(pdf_file_path):
 
     try:
         for page in reader.pages:
-            text = page.extract_text()
-            text = re.sub(r'\s+', ' ', text)  # Normalize whitespace
+            text = page.extract_text(extraction_mode="layout", layout_mode_space_vertically=False)
+            #text = re.sub(r'\s+', ' ', text)  # Normalize whitespace
             
             # Find all matches using the improved row pattern
             for match in row_pattern.findall(text):
