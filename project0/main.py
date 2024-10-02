@@ -21,14 +21,14 @@ def fetchincidents(url):
         with urllib.request.urlopen(request) as response, open(pdf_path, 'wb') as file:
             file.write(response.read())
             
-        print(f"PDF downloaded successfully and saved to {pdf_path}")
+        #print(f"PDF downloaded successfully and saved to {pdf_path}")
         return pdf_path
     except Exception as e:
         print(f"Error downloading PDF: {e}")
         return None
 
 def extractincidents(pdf_file_path):
-    print("Extracting incidents from the PDF...")
+    #print("Extracting incidents from the PDF...")
     reader = PdfReader(pdf_file_path)
     incidents = []
     
@@ -63,7 +63,7 @@ def extractincidents(pdf_file_path):
                     "incident_ori": match[4].strip()
                 })
         
-        print(f"Extracted {len(incidents)} incidents from the PDF.")
+        #print(f"Extracted {len(incidents)} incidents from the PDF.")
         return incidents
     except Exception as e:
         print(f"Error extracting incidents: {e}")
@@ -73,7 +73,7 @@ def extractincidents(pdf_file_path):
 
 
 def createdb():
-    print("Creating SQLite database...")
+    #print("Creating SQLite database...")
     resources_dir = 'resources'
     db_path = os.path.join(resources_dir, 'normanpd.db')
     
@@ -84,7 +84,7 @@ def createdb():
     # Delete the existing database file if it exists
     if os.path.exists(db_path):
         os.remove(db_path)
-        print(f"Existing database deleted: {db_path}")
+        #print(f"Existing database deleted: {db_path}")
 
     # Create a new SQLite database
     conn = sqlite3.connect(db_path)
@@ -102,7 +102,7 @@ def createdb():
     ''')
 
     conn.commit()
-    print(f"Database created at {db_path}")
+    #print(f"Database created at {db_path}")
     return conn
 
 
@@ -110,7 +110,7 @@ def createdb():
 
 def populatedb(db, data):
     if not data:
-        print("No incidents to insert into the database.")
+        #print("No incidents to insert into the database.")
         return
     
     c = db.cursor()
@@ -124,7 +124,7 @@ def populatedb(db, data):
     ''', data)
     
     db.commit()
-    print(f"Inserted {len(data)} incidents into the database.")
+    #print(f"Inserted {len(data)} incidents into the database.")
 
 
 
