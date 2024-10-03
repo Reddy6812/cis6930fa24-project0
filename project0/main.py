@@ -63,6 +63,9 @@ def extractincidents(pdf_file_path):
                 if "Vandalism" in line:
                     incident["nature"] = "Vandalism"  # Force the nature to be 'Larceny'
                 incidents.append(incident)
+                if "EMS Mutual Aid" in line:
+                    incident["nature"] = "EMS Mutual Aid"  # Force the nature to be 'Larceny'
+                incidents.append(incident)
         
         return incidents
     except Exception as e:
