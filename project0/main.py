@@ -21,12 +21,10 @@ def fetchincidents(url):
         with urllib.request.urlopen(request) as response, open(pdf_path, 'wb') as file:
             file.write(response.read())
             
-        #print(f"PDF downloaded successfully and saved to {pdf_path}")
         return pdf_path
     except Exception as e:
         print(f"Error downloading PDF: {e}")
         return None
-
 
 def extractincidents(pdf_file_path):
     #print("Extracting incidents from the PDF...")
@@ -36,10 +34,6 @@ def extractincidents(pdf_file_path):
     # Regex patterns to capture each field
     date_time_pattern = r'(\d{1,2}/\d{1,2}/\d{4} \d{1,2}:\d{2})'
     incident_number_pattern = r'(\d{4}-\d{5,8})'
-    
-    #location_pattern = r"([A-Z0-9][\w\s./,'()-]+(?:\s/\s[A-Z][\w\s]+)*?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))"
-
-    #nature_pattern = r'(911(?:\s+[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)?|[A-Z][a-zA-Z\s]+(?:\s+[A-Za-z\s]+)*)'
 
     location_pattern = r"([A-Z0-9][\w\s./,;'()-]*?(?:RAMP\s\d+\sRAMP)?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))"
     nature_pattern = r'(911(?:\s+[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)?|[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)'
@@ -53,9 +47,9 @@ def extractincidents(pdf_file_path):
     try:
         for page in reader.pages:
             text = page.extract_text(extraction_mode="layout", layout_mode_space_vertically=False)
-            text = re.sub(r'\s+', ' ', text)  # Normalize whitespace
+            text = re.sub(r'\s+', ' ', text)  # normalize whitespace
             
-            # Find all matches using the improved row pattern
+            # find all matches using improved row pattern
             for match in row_pattern.findall(text):
                 incidents.append({
                     "incident_time": match[0].strip(),
@@ -65,35 +59,29 @@ def extractincidents(pdf_file_path):
                     "incident_ori": match[4].strip()
                 })
         
-        #print(f"Extracted {len(incidents)} incidents from the PDF.")
         return incidents
     except Exception as e:
         print(f"Error extracting incidents: {e}")
         return []
 
 
-
-
-
 def createdb():
-    #print("Creating SQLite database...")
     resources_dir = 'resources'
     db_path = os.path.join(resources_dir, 'normanpd.db')
     
-    # Create 'resources' directory if missing
+    # create 'resources' dir if missed
     if not os.path.exists(resources_dir):
         os.makedirs(resources_dir)
     
-    # Delete the existing database file if it exists
+    # delete existing db
     if os.path.exists(db_path):
         os.remove(db_path)
-        #print(f"Existing database deleted: {db_path}")
 
-    # Create a new SQLite database
+    # Create db
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
 
-    # Create the 'incidents' table without unique constraints to allow duplicates
+    # create 'incidents' table without duplicates
     c.execute('''
         CREATE TABLE incidents (
             incident_time TEXT,
@@ -108,30 +96,20 @@ def createdb():
     #print(f"Database created at {db_path}")
     return conn
 
-
-
-
 def populatedb(db, data):
     if not data:
-        #print("No incidents to insert into the database.")
         return
     
     c = db.cursor()
     
     # Debug print to verify data before insertion
-    #print("Data to be inserted:", data)
-    
     c.executemany('''
         INSERT INTO incidents (incident_time, incident_number, incident_location, nature, incident_ori)
         VALUES (:incident_time, :incident_number, :location, :nature, :incident_ori)
     ''', data)
     
     db.commit()
-    #print(f"Inserted {len(data)} incidents into the database.")
-
-
-
-
+ 
 def status(db):
     c = db.cursor()
     # Fetching and counting incidents by 'nature', including duplicates
@@ -172,19 +150,16 @@ def head(db, n=400):
             print(f"{row[0]:<20} {row[1]:<20} {row[2]:<30} {row[3]:<30} {row[4]:<10}")
 
 
-
 def main(url):
     # Fetch data
     pdf_path = fetchincidents(url)
 
     if not pdf_path:
-        print("Failed to download the PDF.")
         return
     
     # Extract incidents
     incidents = extractincidents(pdf_path)
     if not incidents:
-        print("No incidents extracted from the PDF.")
         return
     
     # Create DB
