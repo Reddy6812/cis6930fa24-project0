@@ -53,7 +53,7 @@ def extractincidents(pdf_file_path):
     try:
         for page in reader.pages:
             text = page.extract_text(extraction_mode="layout", layout_mode_space_vertically=False)
-            #text = re.sub(r'\s+', ' ', text)  # Normalize whitespace
+            text = re.sub(r'\s+', ' ', text)  # Normalize whitespace
             
             # Find all matches using the improved row pattern
             for match in row_pattern.findall(text):
@@ -70,6 +70,7 @@ def extractincidents(pdf_file_path):
     except Exception as e:
         print(f"Error extracting incidents: {e}")
         return []
+
 
 
 
