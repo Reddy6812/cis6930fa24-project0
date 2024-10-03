@@ -41,25 +41,19 @@ A DEMO OF THE EXECUTION CAN BE VIEWED BELOW:
 ## FUNCTIONS
 
 #### `fetchincidents(url)`
-- **Purpose**: Downloads the PDF file from the specified URL and saves it locally.
-- **Parameters**: The URL string of the PDF.
-- **Returns**: The path of the saved PDF.
+- Downloads the PDF file from the specified URL and saves it locally and returns the path of the saved PDF.
 
 #### `extractincidents(pdf_file_path)`
-- **Purpose**: Extracts incident information from the PDF.
-- **Parameters**: Path to the downloaded PDF file.
-- **Returns**: A list of dictionaries, each containing incident details like incident time, number, location, nature, and ORI.
+- Extracts incident information from the PDF and returns A list of dictionaries, each containing incident details like incident time, number, location, nature, and ORI.
 
 #### `createdb()`
-- **Purpose**: Creates a SQLite database (`normanpd.db`) in the `resources/` directory.
-- **Returns**: A connection object to the SQLite database.
+- Creates a SQLite database (`normanpd.db`) in the `resources/` directory and returns A connection object to the SQLite database.
 
 #### `populatedb(db, data)`
-- **Purpose**: Inserts the extracted incident data into the database.
-- **Parameters**: SQLite database connection and the extracted incident data.
+- Inserts the extracted incident data into the database and SQLite database connection and the extracted incident data.
 
 #### `status(db)`
-- **Purpose**: Prints a summary of incidents, grouped by nature, in alphabetical order.
+- Prints a summary of incidents, grouped by nature, in alphabetical order.
 
 ## DATABASE DEVELOPMENT
 
