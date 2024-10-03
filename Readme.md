@@ -4,7 +4,7 @@ Name: Vijay Kumar Reddy Gade
 
 ## Assignment Description 
 
-THIS PROJECT AUTOMATICALLY EXTRACTS INCIDENT DATA FROM THE NORMAN, OKLAHOMA POLICE DEPARTMENT’S INCIDENT REPORT PDF FILES. IT PROCESSES THE INCIDENT INFORMATION AND STORES IT IN A SQLITE DATABASE, WHICH CAN THEN BE QUERIED FOR A SUMMARY OF INCIDENT TYPES. SPECIFIC FIELDS LIKE THE DATE/TIME, INCIDENT NUMBER, LOCATION, NATURE, AND ORI ARE PARSED AND STORED IN A DATABASE.
+this project automatically extracts incident data from the norman, oklahoma police department’s incident report pdf files. it processes the incident information and stores it in a sqlite database, which can then be queried for a summary of incident types. specific fields like the date/time, incident number, location, nature, and ori are parsed and stored in a database.
 
 ## HOW TO INSTALL
 
