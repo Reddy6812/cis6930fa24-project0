@@ -9,6 +9,6 @@ setup(
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],
     install_requires=[
-        'pypdf',  # Add other dependencies here if required
+        'pypdf',  # we have to install pypdf, if not avlbl
     ],
 )

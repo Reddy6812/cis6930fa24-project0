@@ -2,18 +2,18 @@ import os
 import pytest
 from project0.main import fetchincidents
 
-# Sample URL for testing
-sample_url = "https://www.normanok.gov/sites/default/files/documents/2024-08/2024-08-01_daily_incident_summary.pdf"
-pdf_file_path = "/tmp/daily_incident_summary.pdf"
+# Test URL and expected PDF path
+url = "https://www.normanok.gov/sites/default/files/documents/2024-08/2024-08-01_daily_incident_summary.pdf"
+pdf_path = "/tmp/daily_incident_summary.pdf"
 
-def test_fetchincidents():
-    # Download the PDF
-    downloaded_path = fetchincidents(sample_url)
+def test_f():
+    # Fetch the PDF
+    d_path = fetchincidents(url)
     
-    # Assertions
-    assert downloaded_path == pdf_file_path
-    assert os.path.exists(downloaded_path)
+    # Validate the file was downloaded correctly
+    assert d_path == pdf_path
+    assert os.path.exists(d_path)
     
-    # Cleanup
-    if os.path.exists(downloaded_path):
-        os.remove(downloaded_path)
+    # Clean up after test
+    if os.path.exists(d_path):
+        os.remove(d_path)
