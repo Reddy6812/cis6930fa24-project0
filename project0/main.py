@@ -34,7 +34,7 @@ def extractincidents(pdf_file_path):
     # Regex patterns to capture each field
     date_time_pattern = r'(\d{1,2}/\d{1,2}/\d{4} \d{1,2}:\d{2})'
     incident_number_pattern = r'(\d{4}-\d{5,8})'
-    location_pattern = r"([A-Z0-9][\w\s./,;'()-]*?(?:RAMP\s\d+\sRAMP)?(?=\s(?:911|MVA|COP|EMS Mutual Aid|[A-Z][a-z/])))"
+    location_pattern = r"([A-Z0-9][\w\s./,;'()-]*?(?:RAMP\s\d+\sRAMP)?(?=\s(?:911|MVA|COP|EMS|[A-Z][a-z/])))"
     nature_pattern = r'(911(?:\s+[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)?|[A-Z][a-zA-Z\s]+(?:/[A-Za-z\s]+)*)'
     ori_pattern = r'(OK\d+|EMSSTAT|\d{5})'
 
@@ -58,17 +58,18 @@ def extractincidents(pdf_file_path):
                     "incident_ori": match[4].strip()
                 }
 
-                
+                # Post-processing check for "Fraud" and "Robinson"
                 line = ' '.join(match)
-                if "Vandalism" in test:
-                    incident["nature"] = "Vandalism"  # Force the nature to be 'Larceny'
+                if "Larceny" in line:
+                    incident["nature"] = "Larceny"  # Force the nature to be 'Larceny'
+
                 incidents.append(incident)
-                
         
         return incidents
     except Exception as e:
         print(f"Error extracting incidents: {e}")
         return []
+
 
 
 
