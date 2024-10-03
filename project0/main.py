@@ -60,9 +60,9 @@ def extractincidents(pdf_file_path):
 
                 
                 
-                if "Vandalism" in line:
-                    incident["nature"] = "Vandalism"  # Force the nature to be 'Larceny'
-                incidents.append(incident)
+                # if "Vandalism" in test:
+                #     incident["nature"] = "Vandalism"  # Force the nature to be 'Larceny'
+                # incidents.append(incident)
                 
         
         return incidents
