@@ -58,6 +58,7 @@ def extractincidents(pdf_file_path):
                     "incident_ori": match[4].strip()
                 }
 
+                
                 # Post-processing check for "Fraud" and "Robinson"
                 line = ' '.join(match)
                 if "Fraud" in line and "Robinson" in line:
@@ -66,7 +67,9 @@ def extractincidents(pdf_file_path):
                 # Post-processing check for "Larceny"
                 if "Larceny" in line:
                     incident["nature"] = "Larceny"  # Force the nature to be 'Larceny'
-
+                
+                if "Vandalism" in line:
+                    incident["nature"] = "Vandalism"  # Force the nature to be 'Larceny'
                 incidents.append(incident)
         
         return incidents
