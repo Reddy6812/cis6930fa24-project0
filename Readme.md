@@ -27,6 +27,7 @@ TO RUN THE SCRIPT WITH A SAMPLE PDF URL, USE THE FOLLOWING COMMAND:
 ```bash
 pipenv run python project0/main.py --incidents <URL_OF_INCIDENT_PDF>
 ```
+- Testing:
 ```bash
 pipenv run python -m pytest
 ```
