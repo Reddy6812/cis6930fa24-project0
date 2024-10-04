@@ -1,4 +1,4 @@
-# cis6930fa24 -- Assignment0
+# cis6930fa24 -- Project0
 
 Name: Vijay Kumar Reddy Gade
 
@@ -27,16 +27,19 @@ TO RUN THE SCRIPT WITH A SAMPLE PDF URL, USE THE FOLLOWING COMMAND:
 ```bash
 pipenv run python project0/main.py --incidents <URL_OF_INCIDENT_PDF>
 ```
-
+```bash
+pipenv run python -m pytest
+```
 EXAMPLE:
 
 ```bash
 pipenv run python project0/main.py --incidents "https://www.normanok.gov/sites/default/files/documents/2024-08/2024-08-01_daily_incident_summary.pdf"
 ```
 
-A DEMO OF THE EXECUTION CAN BE VIEWED BELOW:
+DEMO OF EXECUTION:
 
-![video](demo.gif)
+[![Watch the video](https://img.youtube.com/vi/tlGpP4r7wa0/0.jpg)](https://www.youtube.com/watch?v=tlGpP4r7wa0)
+
 
 ## FUNCTIONS
 
