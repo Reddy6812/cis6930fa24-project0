@@ -62,7 +62,8 @@ def extractincidents(pdf_file_path):
                 line = ' '.join(match)
                 if "Vandalism" in line:
                     incident["nature"] = "Vandalism"  # Force the nature to be 'Larceny'
-                
+                if "EMS Mutual Aid" in line:
+                    incident["nature"] = "EMS Mutual Aid"  # Force the nature to be 'Larceny'
                 '''
                 if "EMS Mutual Aid" in line:
                     incident["nature"] = "EMS Mutual Aid"
